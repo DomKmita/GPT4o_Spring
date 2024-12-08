@@ -16,3 +16,11 @@ CREATE TABLE pets (
                       eircode VARCHAR(20) NOT NULL,
                       FOREIGN KEY (eircode) REFERENCES households(eircode) ON DELETE CASCADE
 );
+
+-- Users Table
+CREATE TABLE app_users (
+                           username VARCHAR(50) PRIMARY KEY,
+                           password VARCHAR(255) NOT NULL,
+                           role VARCHAR(20) NOT NULL,
+                           unlocked BOOLEAN NOT NULL
+);

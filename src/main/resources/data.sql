@@ -1,3 +1,11 @@
+-- Insert Sample Users into Users Table
+INSERT INTO app_users (username, password, role, unlocked) VALUES
+                                                           ('admin', '$2y$10$sPrbT7GKWFKWBC.1fLbA7eT1RQP09A/hGnVb9N5vy3EyYgGnR5OMa', 'ROLE_ADMIN', TRUE),
+                                                           ('user1', '$2y$10$sPrbT7GKWFKWBC.1fLbA7eT1RQP09A/hGnVb9N5vy3EyYgGnR5OMa', 'ROLE_USER', TRUE),
+                                                           ('user2', '$2y$10$sPrbT7GKWFKWBC.1fLbA7eT1RQP09A/hGnVb9N5vy3EyYgGnR5OMa', 'ROLE_USER', TRUE),
+                                                           ('locked_user', '$2y$10$sPrbT7GKWFKWBC.1fLbA7eT1RQP09A/hGnVb9N5vy3EyYgGnR5OMa', 'ROLE_USER', FALSE);
+
+
 -- Insert Sample Data into Households
 INSERT INTO households (eircode, number_of_occupants, max_number_of_occupants, owner_occupied) VALUES
                                                                                                    ('EIR123', 3, 5, TRUE),

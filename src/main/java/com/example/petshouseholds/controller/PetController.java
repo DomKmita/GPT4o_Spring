@@ -9,7 +9,6 @@ import com.example.petshouseholds.service.PetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class PetController {
     @PostMapping
     public ResponseEntity<Pet> createPet(@RequestBody @Valid PetDTO petDTO) {
         Household household = householdService.getHouseholdByEircode(petDTO.eircode());
-        Pet pet = new Pet(null, petDTO.name(), petDTO.animalType(), petDTO.breed(), petDTO.age(), household);
+        Pet pet = new Pet(petDTO.id(), petDTO.name(), petDTO.animalType(), petDTO.breed(), petDTO.age(), household);
         return ResponseEntity.ok(petService.createPet(pet));
     }
 
