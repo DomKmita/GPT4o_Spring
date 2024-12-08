@@ -9,6 +9,7 @@ import com.example.petshouseholds.service.PetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class PetController {
     private final HouseholdService householdService;
 
     // Create a new pet
-   // @Secured("ROLE_ADMIN")
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public ResponseEntity<Pet> createPet(@RequestBody @Valid PetDTO petDTO) {
         Household household = householdService.getHouseholdByEircode(petDTO.eircode());
@@ -43,7 +44,7 @@ public class PetController {
     }
 
     // Update pet
-   // @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PutMapping("/{id}")
     public ResponseEntity<Pet> updatePet(@PathVariable Long id, @Valid @RequestBody PetDTO petDTO) {
         Pet updatedPet = new Pet(
@@ -58,7 +59,7 @@ public class PetController {
     }
 
     // Delete pet by ID
-  //  @Secured("ROLE_ADMIN")
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePetById(@PathVariable Long id) {
         petService.deletePetById(id);
@@ -66,7 +67,7 @@ public class PetController {
     }
 
     // Delete pets by name (case insensitive)
-  //  @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/name/{name}")
     public ResponseEntity<Void> deletePetsByName(@PathVariable String name) {
         petService.deletePetsByName(name);
@@ -92,7 +93,7 @@ public class PetController {
     }
 
     // Get pet statistics
-   // @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/statistics")
     public ResponseEntity<Object> getPetStatistics() {
         return ResponseEntity.ok(petService.getPetStatistics());

@@ -6,12 +6,12 @@ import com.example.petshouseholds.entity.Household;
 import com.example.petshouseholds.entity.Pet;
 import com.example.petshouseholds.service.HouseholdService;
 import com.example.petshouseholds.service.PetService;
-import com.example.petshouseholds.service.impl.HouseholdServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -48,13 +48,13 @@ public class PetGraphQLController {
         return petService.getNameTypeAndBreedOnly();
     }
 
-   // @Secured({"ROLE_USER", "ROLE_ADMIN"})
+   @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @QueryMapping
     public Object getPetStatistics() {
         return petService.getPetStatistics();
     }
 
-   // @Secured("ROLE_ADMIN")
+    @Secured("ROLE_ADMIN")
     @MutationMapping
     public Pet createPet(@Argument @Valid PetDTO input) {
         Household household = householdService.getHouseholdByEircode(input.eircode());
@@ -62,7 +62,7 @@ public class PetGraphQLController {
         return petService.createPet(pet);
     }
 
-  //  @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @MutationMapping
     public Pet updatePet(@Argument @Valid PetDTO input) {
         if (input.id() == null) {
@@ -72,14 +72,14 @@ public class PetGraphQLController {
         return petService.updatePet(input.id(), updatedPet);
     }
 
-   // @Secured("ROLE_ADMIN")
+   @Secured("ROLE_ADMIN")
     @MutationMapping
     public boolean deletePetById(@Argument Long id) {
         petService.deletePetById(id);
         return true;
     }
 
- //   @Secured("ROLE_ADMIN")
+    @Secured("ROLE_ADMIN")
     @MutationMapping
     public boolean deletePetsByName(@Argument String name) {
         petService.deletePetsByName(name);

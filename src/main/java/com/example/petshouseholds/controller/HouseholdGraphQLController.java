@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class HouseholdGraphQLController {
         return householdService.getHouseholdStatistics();
     }
 
-    //@Secured("ROLE_ADMIN")
+    @Secured("ROLE_ADMIN")
     @MutationMapping
     public Household createHousehold(@Argument @Valid HouseholdDTO input) {
         Household household = new Household(input.eircode(), input.numberOfOccupants(),
@@ -58,7 +59,7 @@ public class HouseholdGraphQLController {
         return householdService.createHousehold(household);
     }
 
-    //@Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @MutationMapping
     public Household updateHousehold(@Argument @Valid HouseholdDTO input) {
         Household household = new Household(input.eircode(), input.numberOfOccupants(),
@@ -66,7 +67,7 @@ public class HouseholdGraphQLController {
         return householdService.updateHousehold(input.eircode(), household);
     }
 
-   // @Secured("ROLE_ADMIN")
+    @Secured("ROLE_ADMIN")
     @MutationMapping
     public boolean deleteHouseholdByEircode(@Argument String eircode) {
         householdService.deleteHouseholdByEircode(eircode);

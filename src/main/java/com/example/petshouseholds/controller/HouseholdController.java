@@ -19,7 +19,6 @@ public class HouseholdController {
     private final HouseholdService householdService;
 
     // Create a new household
-   // @Secured("ROLE_ADMIN")
     @PostMapping
     public ResponseEntity<Household> createHousehold(@Valid @RequestBody HouseholdDTO householdDTO) {
         Household household = new Household(
@@ -51,7 +50,6 @@ public class HouseholdController {
     }
 
     // Update household
-   // @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PutMapping("/{eircode}")
     public ResponseEntity<Household> updateHousehold(@PathVariable String eircode, @Valid @RequestBody HouseholdDTO householdDTO) {
         Household updatedHousehold = new Household(
@@ -65,7 +63,6 @@ public class HouseholdController {
     }
 
     // Delete household by eircode
-   // @Secured("ROLE_ADMIN")
     @DeleteMapping("/{eircode}")
     public ResponseEntity<Void> deleteHouseholdByEircode(@PathVariable String eircode) {
         householdService.deleteHouseholdByEircode(eircode);
