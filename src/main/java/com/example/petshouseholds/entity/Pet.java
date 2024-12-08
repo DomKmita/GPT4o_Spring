@@ -1,9 +1,11 @@
-package com.example.petshouseholds.entities;
+package com.example.petshouseholds.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "pets")
@@ -27,7 +29,9 @@ public class Pet {
     @Column(nullable = false)
     private int age;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "eircode", nullable = false)
+    @JsonBackReference
     private Household household;
 }

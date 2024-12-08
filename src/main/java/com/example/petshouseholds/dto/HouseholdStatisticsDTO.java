@@ -1,4 +1,6 @@
 package com.example.petshouseholds.dto;
 
-public record HouseholdStatisticsDTO() {
-}
+public record HouseholdStatisticsDTO(
+        int emptyHouses,
+        int fullHouses
+) {}

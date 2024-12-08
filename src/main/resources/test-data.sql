@@ -3,6 +3,7 @@ INSERT INTO households (eircode, number_of_occupants, max_number_of_occupants, o
                                                                                                    ('EIR123', 3, 5, TRUE),
                                                                                                    ('EIR456', 2, 4, FALSE),
                                                                                                    ('EIR789', 0, 2, TRUE),
+                                                                                                   ('EIR202', 1, 3, FALSE),
                                                                                                    ('EIR101', 5, 5, TRUE);
 
 -- Insert Sample Data into Pets

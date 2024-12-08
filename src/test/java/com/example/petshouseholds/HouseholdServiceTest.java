@@ -1,5 +1,6 @@
 package com.example.petshouseholds;
 
+import com.example.petshouseholds.dto.HouseholdWithoutPetsDTO;
 import com.example.petshouseholds.entity.Household;
 import com.example.petshouseholds.exception.NotFoundException;
 import com.example.petshouseholds.repository.HouseholdRepository;
@@ -37,9 +38,9 @@ class HouseholdServiceTest {
 
         when(householdRepository.findById("EIR123")).thenReturn(Optional.of(household));
 
-        Household retrievedHousehold = householdService.getHouseholdByEircodeNoPets("EIR123");
+        HouseholdWithoutPetsDTO retrievedHousehold = householdService.getHouseholdByEircodeNoPets("EIR123");
 
-        assertThat(retrievedHousehold.getEircode()).isEqualTo("EIR123");
+        assertThat(retrievedHousehold.eircode()).isEqualTo("EIR123");
         verify(householdRepository, times(1)).findById("EIR123");
     }
 

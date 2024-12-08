@@ -1,8 +1,8 @@
-package com.example.petshouseholds.entities;
+package com.example.petshouseholds.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import java.util.List;
 @Entity
 @Table(name = "households")
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Household {
@@ -27,5 +29,6 @@ public class Household {
     private boolean ownerOccupied;
 
     @OneToMany(mappedBy = "household", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Pet> pets = new ArrayList<>();
 }

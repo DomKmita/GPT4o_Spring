@@ -1,17 +1,20 @@
-package com.example.petshouseholds.dtos;
+package com.example.petshouseholds.dto;
+import jakarta.validation.constraints.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public record PetDTO(
+        Long id,
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class PetDTO {
-    private Long id;
-    private String name;
-    private String animalType;
-    private String breed;
-    private int age;
-    private String eircode;
-}
+        @NotBlank(message = "Name cannot be blank")
+        String name,
+
+        @NotBlank(message = "Animal type cannot be blank")
+        String animalType,
+
+        String breed,
+
+        @Min(value = 0, message = "Age cannot be negative")
+        int age,
+
+        @NotBlank(message = "Eircode cannot be blank")
+        String eircode
+) {}

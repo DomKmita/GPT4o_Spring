@@ -1,4 +1,7 @@
 package com.example.petshouseholds.exception;
 
-public class BadDataException {
+public class BadDataException extends RuntimeException {
+    public BadDataException(String message) {
+        super(message);
+    }
 }

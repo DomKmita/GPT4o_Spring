@@ -1,0 +1,82 @@
+type Query {
+    # Pet Queries
+    getAllPets: [Pet!]!
+    getPetById(id: ID!): Pet
+    findPetsByAnimalType(animalType: String!): [Pet!]!
+    findPetsByBreed(breed: String!): [Pet!]!
+    getNameAndBreedOnly: [PetNameTypeBreed!]!
+    getPetStatistics: PetStatistics!
+
+    # Household Queries
+    getAllHouseholds: [Household!]!
+    getHouseholdByEircodeNoPets(eircode: String!): Household
+    getHouseholdByEircodeWithPets(eircode: String!): Household
+    findHouseholdsWithNoPets: [Household!]!
+    findOwnerOccupiedHouseholds: [Household!]!
+    getHouseholdStatistics: HouseholdStatistics!
+}
+
+type Mutation {
+    # Pet Mutations
+    createPet(input: PetDTO!): Pet
+    updatePet(input: PetDTO!): Pet
+    deletePetById(id: ID!): Boolean
+    deletePetsByName(name: String!): Boolean
+
+    # Household Mutations
+    createHousehold(input: HouseholdDTO!): Household
+    updateHousehold(input: HouseholdDTO!): Household
+    deleteHouseholdByEircode(eircode: String!): Boolean
+}
+
+# Pet Types
+type Pet {
+    id: ID!
+    name: String!
+    animalType: String!
+    breed: String
+    age: Int!
+}
+
+type PetNameTypeBreed {
+    name: String!
+    animalType: String!
+    breed: String!
+}
+
+type PetStatistics {
+    averageAge: Float!
+    oldestAge: Int!
+    totalCount: Int!
+}
+
+# Household Types
+type Household {
+    eircode: String!
+    numberOfOccupants: Int!
+    maxNumberOfOccupants: Int!
+    ownerOccupied: Boolean!
+    pets: [Pet!]!
+}
+
+type HouseholdStatistics {
+    emptyHouses: Int!
+    fullHouses: Int!
+}
+
+# Input Types
+input PetDTO {
+    id: ID
+    name: String!
+    animalType: String!
+    breed: String
+    age: Int!
+    eircode: String!
+}
+
+input HouseholdDTO {
+    eircode: String!
+    numberOfOccupants: Int!
+    maxNumberOfOccupants: Int!
+    ownerOccupied: Boolean!
+}

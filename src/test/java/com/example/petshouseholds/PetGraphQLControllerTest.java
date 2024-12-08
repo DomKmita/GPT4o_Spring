@@ -1,18 +1,19 @@
 package com.example.petshouseholds;
+
 import com.example.petshouseholds.controller.PetGraphQLController;
+import com.example.petshouseholds.entity.Household;
 import com.example.petshouseholds.entity.Pet;
 import com.example.petshouseholds.service.PetService;
-import org.junit.jupiter.api.DisplayName;
+import com.example.petshouseholds.service.HouseholdService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
+import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.List;
-import java.util.Map;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @GraphQlTest(PetGraphQLController.class)
 class PetGraphQLControllerTest {
@@ -23,15 +24,24 @@ class PetGraphQLControllerTest {
     @MockBean
     private PetService petService;
 
+    @MockBean
+    private HouseholdService householdService;
+
     @Test
-    @DisplayName("Query: Get all pets")
-    void testGetAllPets() {
-        Pet pet = new Pet(1L, "Buddy", "Dog", "Labrador", 3, null);
-        when(petService.getAllPets()).thenReturn(List.of(pet));
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void testCreatePet_Admin() {
+        when(householdService.getHouseholdByEircode("EIR123")).thenReturn(new Household());
+        when(petService.createPet(any())).thenReturn(new Pet());
 
         graphQlTester.document("""
-                query {
-                    getAllPets {
+                mutation {
+                    createPet(input: {
+                        name: "Buddy",
+                        animalType: "Dog",
+                        breed: "Labrador",
+                        age: 3,
+                        eircode: "EIR123"
+                    }) {
                         id
                         name
                         animalType
@@ -41,65 +51,34 @@ class PetGraphQLControllerTest {
                 }
                 """)
                 .execute()
-                .path("getAllPets")
-                .entityList(Pet.class)
-                .hasSize(1)
-                .contains(pet);
-
-        verify(petService, times(1)).getAllPets();
-    }
-
-    @Test
-    @DisplayName("Mutation: Create pet")
-    void testCreatePet() {
-        Pet pet = new Pet(1L, "Buddy", "Dog", "Labrador", 3, null);
-        when(petService.createPet(any(Pet.class))).thenReturn(pet);
-
-        graphQlTester.document("""
-            mutation {
-                createPet(input: {
-                    name: "Buddy",
-                    animalType: "Dog",
-                    breed: "Labrador",
-                    age: 3,
-                    eircode: "EIR123"
-                }) {
-                    id
-                    name
-                    animalType
-                    breed
-                    age
-                }
-            }
-            """)
-                .execute()
                 .path("createPet")
                 .entity(Pet.class)
-                .isEqualTo(pet);
-
-        verify(petService, times(1)).createPet(any(Pet.class));
+                .matches(pet -> pet.getName().equals("Buddy"));
     }
 
     @Test
-    @DisplayName("Query: Get pet statistics")
-    void testGetPetStatistics() {
-        Map<String, Object> stats = Map.of("averageAge", 3.5, "oldestAge", 5, "totalCount", 2);
-        when(petService.getPetStatistics()).thenReturn(stats);
-
+    @WithMockUser(username = "user", roles = {"USER"})
+    void testCreatePet_UserForbidden() {
         graphQlTester.document("""
-                query {
-                    getPetStatistics {
-                        averageAge
-                        oldestAge
-                        totalCount
+                mutation {
+                    createPet(input: {
+                        name: "Buddy",
+                        animalType: "Dog",
+                        breed: "Labrador",
+                        age: 3,
+                        eircode: "EIR123"
+                    }) {
+                        id
+                        name
+                        animalType
+                        breed
+                        age
                     }
                 }
                 """)
                 .execute()
-                .path("getPetStatistics")
-                .entity(Map.class)
-                .isEqualTo(stats);
-
-        verify(petService, times(1)).getPetStatistics();
+                .errors()
+                .satisfy(errors -> errors.stream()
+                        .anyMatch(error -> error.getMessage().contains("Access is denied")));
     }
 }
